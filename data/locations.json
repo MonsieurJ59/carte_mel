@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "name": "Grand Place de Lille",
+    "description": "La place centrale historique de Lille, entourée de bâtiments flamands et de la célèbre colonne de la Déesse.",
+    "address": "Grand Place, 59000 Lille",
+    "latitude": 50.6365,
+    "longitude": 3.0635,
+    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
+    "link": "https://www.lilletourism.com/",
+    "category": "Monument"
+  },
+  {
+    "id": 2,
+    "name": "Vieux-Lille",
+    "description": "Quartier historique aux rues pavées, boutiques de créateurs et restaurants gastronomiques.",
+    "address": "Vieux-Lille, 59800 Lille",
+    "latitude": 50.6425,
+    "longitude": 3.0598,
+    "image": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400&h=300&fit=crop",
+    "link": "https://www.lilletourism.com/decouvrir/les-quartiers/vieux-lille/",
+    "category": "Quartier"
+  },
+  {
+    "id": 3,
+    "name": "Palais des Beaux-Arts",
+    "description": "L'un des plus grands musées de France, abritant des collections d'art européen du Moyen Âge au XXe siècle.",
+    "address": "18 bis Rue de Valmy, 59000 Lille",
+    "latitude": 50.6308,
+    "longitude": 3.0622,
+    "image": "https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?w=400&h=300&fit=crop",
+    "link": "https://pba.lille.fr/",
+    "category": "Musée"
+  },
+  {
+    "id": 4,
+    "name": "Citadelle de Lille",
+    "description": "Forteresse du XVIIe siècle conçue par Vauban, aujourd'hui entourée d'un parc verdoyant.",
+    "address": "Avenue du 43e Régiment d'Infanterie, 59800 Lille",
+    "latitude": 50.6402,
+    "longitude": 3.0451,
+    "image": "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=400&h=300&fit=crop",
+    "link": "https://www.lilletourism.com/decouvrir/patrimoine/la-citadelle/",
+    "category": "Monument"
+  },
+  {
+    "id": 5,
+    "name": "Gare Lille Flandres",
+    "description": "Gare historique au cœur de Lille, point de départ vers Paris et les grandes villes du Nord.",
+    "address": "Place des Buisses, 59000 Lille",
+    "latitude": 50.6366,
+    "longitude": 3.0705,
+    "image": "https://images.unsplash.com/photo-1515165562839-978bbcf18277?w=400&h=300&fit=crop",
+    "link": "https://www.gares-sncf.com/fr/gare/frlpf/lille-flandres",
+    "category": "Transport"
+  },
+  {
+    "id": 6,
+    "name": "Euralille",
+    "description": "Centre commercial moderne et quartier d'affaires, symbole du renouveau lillois.",
+    "address": "100 Centre Commercial, 59777 Lille",
+    "latitude": 50.6381,
+    "longitude": 3.0752,
+    "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=300&fit=crop",
+    "link": "https://www.euralille.com/",
+    "category": "Shopping"
+  },
+  {
+    "id": 7,
+    "name": "Zoo de Lille",
+    "description": "Parc zoologique gratuit situé dans la Citadelle, abritant plus de 100 espèces animales.",
+    "address": "Avenue Mathias Delobel, 59800 Lille",
+    "latitude": 50.6432,
+    "longitude": 3.0478,
+    "image": "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400&h=300&fit=crop",
+    "link": "https://zoo.lille.fr/",
+    "category": "Loisirs"
+  },
+  {
+    "id": 8,
+    "name": "La Piscine - Musée de Roubaix",
+    "description": "Musée d'art et d'industrie installé dans une ancienne piscine Art déco.",
+    "address": "23 Rue de l'Espérance, 59100 Roubaix",
+    "latitude": 50.6912,
+    "longitude": 3.1615,
+    "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
+    "link": "https://www.roubaix-lapiscine.com/",
+    "category": "Musée"
+  },
+  {
+    "id": 9,
+    "name": "Villa Cavrois",
+    "description": "Chef-d'œuvre de l'architecture moderniste des années 1930, conçu par Robert Mallet-Stevens.",
+    "address": "60 Avenue du Président John Fitzgerald Kennedy, 59170 Croix",
+    "latitude": 50.6678,
+    "longitude": 3.1489,
+    "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop",
+    "link": "https://www.villa-cavrois.fr/",
+    "category": "Monument"
+  },
+  {
+    "id": 10,
+    "name": "Parc Barbieux",
+    "description": "Magnifique parc à l'anglaise de 34 hectares, idéal pour les promenades et pique-niques.",
+    "address": "Parc Barbieux, 59100 Roubaix",
+    "latitude": 50.6745,
+    "longitude": 3.1678,
+    "image": "https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=400&h=300&fit=crop",
+    "link": "https://www.ville-roubaix.fr/",
+    "category": "Loisirs"
+  }
+]
