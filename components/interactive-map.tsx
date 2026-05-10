@@ -137,11 +137,11 @@ export function InteractiveMap({ locations }: InteractiveMapProps) {
         {/* Sidebar - hidden on mobile unless showList is true */}
         <aside
           className={cn(
-            "absolute inset-0 z-10 overflow-y-auto bg-background p-4 transition-transform md:relative md:inset-auto md:z-auto md:w-80 md:translate-x-0 md:border-r lg:w-96",
+            "absolute inset-0 z-20 overflow-y-auto bg-background p-4 transition-transform md:relative md:inset-auto md:z-auto md:w-80 md:translate-x-0 md:border-r lg:w-96",
             showList ? "translate-x-0" : "-translate-x-full"
           )}
         >
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 pb-20 md:pb-0">
             {filteredLocations.map((location) => (
               <LocationCard
                 key={location.id}
@@ -154,7 +154,10 @@ export function InteractiveMap({ locations }: InteractiveMapProps) {
         </aside>
 
         {/* Map */}
-        <div className="flex-1">
+        <div className={cn(
+          "flex-1 transition-opacity", 
+          showList ? "opacity-0 md:opacity-100" : "opacity-100"
+        )}>
           <Suspense
             fallback={
               <div className="flex h-full w-full items-center justify-center bg-muted">
