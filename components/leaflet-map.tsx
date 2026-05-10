@@ -1,24 +1,29 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet"
+import { MapContainer, TileLayer, Marker, Popup, useMap, GeoJSON } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 import type { Location } from "@/types/location"
 import { MarkerPopup } from "./marker-popup"
+import boundariesData from "@/data/boundaries.json"
 
-// Fix for default marker icons in Leaflet with webpack/Next.js
-const DefaultIcon = L.icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
+// Custom marker icons for different categories
+const createCustomIcon = (color: string) => {
+  return L.divIcon({
+    className: "custom-div-icon",
+    html: `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [0, -10],
+  })
+}
 
-L.Marker.prototype.options.icon = DefaultIcon
+const icons = {
+  TSA: createCustomIcon("#ef4444"), // Red
+  Polyhandicap: createCustomIcon("#3b82f6"), // Blue
+  "Les Deux": createCustomIcon("#9333ea"), // Purple
+}
 
 // Component to handle flying to a location
 function FlyToLocation({ location }: { location: Location | null }) {
@@ -44,9 +49,9 @@ interface LeafletMapProps {
 export function LeafletMap({ locations, selectedLocation, onMarkerClick }: LeafletMapProps) {
   const [mounted, setMounted] = useState(false)
 
-  // Lille center coordinates
-  const lilleCenter: [number, number] = [50.6292, 3.0573]
-  const defaultZoom = 12
+  // Region center coordinates (NPDC)
+  const regionCenter: [number, number] = [50.48, 2.9]
+  const defaultZoom = 9
 
   useEffect(() => {
     setMounted(true)
@@ -63,9 +68,27 @@ export function LeafletMap({ locations, selectedLocation, onMarkerClick }: Leafl
     )
   }
 
+  const getBoundaryStyle = (feature: any) => {
+    if (feature.id === "mel") {
+      return {
+        color: "#000",
+        weight: 2,
+        dashArray: "5, 5",
+        fillOpacity: 0,
+      }
+    }
+    return {
+      fillColor: feature.properties.fill,
+      weight: 2,
+      opacity: 1,
+      color: feature.properties.stroke,
+      fillOpacity: 0.1,
+    }
+  }
+
   return (
     <MapContainer
-      center={lilleCenter}
+      center={regionCenter}
       zoom={defaultZoom}
       scrollWheelZoom={true}
       className="h-full w-full"
@@ -76,12 +99,18 @@ export function LeafletMap({ locations, selectedLocation, onMarkerClick }: Leafl
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
+      <GeoJSON 
+        data={boundariesData as any} 
+        style={getBoundaryStyle}
+      />
+
       <FlyToLocation location={selectedLocation} />
 
       {locations.map((location) => (
         <Marker
           key={location.id}
           position={[location.latitude, location.longitude]}
+          icon={icons[location.category as keyof typeof icons] || icons.TSA}
           eventHandlers={{
             click: () => onMarkerClick(location),
           }}

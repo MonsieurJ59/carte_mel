@@ -1,6 +1,6 @@
 "use client"
 
-import { ExternalLink, MapPin } from "lucide-react"
+import { ExternalLink, MapPin, Phone } from "lucide-react"
 import type { Location } from "@/types/location"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -22,49 +22,46 @@ export function LocationCard({ location, isSelected, onClick }: LocationCardProp
       onClick={onClick}
     >
       <CardContent className="p-3">
-        <div className="flex gap-3">
-          {location.image && (
-            <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
-              <img
-                src={location.image}
-                alt={location.name}
-                className="h-full w-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none"
-                }}
-              />
-            </div>
-          )}
-          <div className="flex min-w-0 flex-1 flex-col">
-            <div className="mb-1 flex items-start justify-between gap-2">
-              <h3 className="truncate text-sm font-semibold">{location.name}</h3>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="text-sm font-bold text-foreground leading-snug">{location.name}</h3>
+            <div className="flex flex-col items-end gap-1">
+              {location.territory && (
+                <span className="flex-shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider border border-primary/30 text-primary bg-primary/5">
+                  {location.territory === "MEL" ? "MEL" : "HORS MEL"}
+                </span>
+              )}
               {location.category && (
-                <span className="flex-shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                <span className={cn(
+                  "flex-shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white",
+                  location.category === "TSA" ? "bg-red-500" : 
+                  location.category === "Polyhandicap" ? "bg-blue-500" : 
+                  "bg-purple-600"
+                )}>
                   {location.category}
                 </span>
               )}
             </div>
-            <p className="mb-2 line-clamp-2 text-xs text-muted-foreground">{location.description}</p>
-            <div className="mt-auto flex items-center gap-1 text-xs text-muted-foreground">
-              <MapPin className="h-3 w-3 flex-shrink-0" />
+          </div>
+
+          <p className="line-clamp-2 text-xs text-muted-foreground leading-relaxed">
+            {location.description}
+          </p>
+
+          <div className="space-y-1.5 mt-1">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-primary" />
               <span className="truncate">{location.address}</span>
             </div>
+            
+            {location.phone && (
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Phone className="h-3.5 w-3.5 flex-shrink-0 text-primary" />
+                <span>{location.phone}</span>
+              </div>
+            )}
           </div>
         </div>
-        {location.link && (
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            className="mt-2 w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <a href={location.link} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="mr-1.5 h-3 w-3" />
-              Visiter
-            </a>
-          </Button>
-        )}
       </CardContent>
     </Card>
   )

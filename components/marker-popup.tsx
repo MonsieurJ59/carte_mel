@@ -1,6 +1,6 @@
 "use client"
 
-import { ExternalLink, MapPin } from "lucide-react"
+import { ExternalLink, MapPin, Phone, Users, Home } from "lucide-react"
 import type { Location } from "@/types/location"
 import { Button } from "@/components/ui/button"
 
@@ -10,39 +10,68 @@ interface MarkerPopupProps {
 
 export function MarkerPopup({ location }: MarkerPopupProps) {
   return (
-    <div className="min-w-[250px] max-w-[300px]">
-      {location.image && (
-        <div className="relative -mx-3 -mt-3 mb-3 h-32 overflow-hidden rounded-t-lg">
-          <img
-            src={location.image}
-            alt={location.name}
-            className="h-full w-full object-cover"
-            onError={(e) => {
-              e.currentTarget.style.display = "none"
-            }}
-          />
+    <div className="min-w-[250px] max-w-[300px] py-1">
+      <div className="mb-2 flex flex-col gap-1.5">
+        <h3 className="text-base font-bold text-foreground leading-tight">{location.name}</h3>
+        <div className="flex flex-wrap gap-1.5">
+          {location.territory && (
+            <span className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border border-primary/30 text-primary bg-primary/5">
+              {location.territory === "MEL" ? "MEL" : "HORS MEL"}
+            </span>
+          )}
           {location.category && (
-            <span className="absolute right-2 top-2 rounded-full bg-primary/90 px-2 py-0.5 text-xs font-medium text-primary-foreground">
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white ${
+              location.category === "TSA" ? "bg-red-500" : 
+              location.category === "Polyhandicap" ? "bg-blue-500" : 
+              "bg-purple-600"
+            }`}>
               {location.category}
             </span>
           )}
         </div>
-      )}
+      </div>
 
-      <h3 className="mb-1 text-base font-semibold text-foreground">{location.name}</h3>
+      <div className="space-y-2.5">
+        <div className="flex items-start gap-2 text-xs text-muted-foreground">
+          <MapPin className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
+          <span className="font-medium">{location.address}</span>
+        </div>
 
-      <p className="mb-2 text-sm text-muted-foreground leading-relaxed">{location.description}</p>
+        {location.phone && (
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Phone className="h-3.5 w-3.5 flex-shrink-0 text-primary" />
+            <a href={`tel:${location.phone}`} className="hover:text-primary transition-colors font-medium">
+              {location.phone}
+            </a>
+          </div>
+        )}
 
-      <div className="mb-3 flex items-start gap-1.5 text-xs text-muted-foreground">
-        <MapPin className="mt-0.5 h-3 w-3 flex-shrink-0" />
-        <span>{location.address}</span>
+        {location.publicType && (
+          <div className="flex items-start gap-2 text-xs text-muted-foreground">
+            <Users className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
+            <div>
+              <span className="font-semibold block text-[10px] uppercase text-muted-foreground/70">Public</span>
+              <span className="font-medium">{location.publicType}</span>
+            </div>
+          </div>
+        )}
+
+        {location.admissionType && (
+          <div className="flex items-start gap-2 text-xs text-muted-foreground">
+            <Home className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
+            <div>
+              <span className="font-semibold block text-[10px] uppercase text-muted-foreground/70">Accueil</span>
+              <span className="font-medium">{location.admissionType}</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {location.link && (
-        <Button asChild size="sm" className="w-full">
+        <Button asChild size="sm" className="mt-4 w-full h-8 text-xs">
           <a href={location.link} target="_blank" rel="noopener noreferrer">
             <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
-            Visiter le site
+            En savoir plus
           </a>
         </Button>
       )}

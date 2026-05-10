@@ -7,5 +7,10 @@ export interface Location {
   longitude: number
   image?: string
   link?: string
-  category?: string
+  category: "TSA" | "Polyhandicap" | "Les Deux"
+  phone?: string
+  publicType?: string
+  admissionType?: string
+  territory: "MEL" | "HORS-MEL"
+  department: "Nord" | "Pas-de-Calais"
 }

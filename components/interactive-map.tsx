@@ -22,18 +22,19 @@ export function InteractiveMap({ locations }: InteractiveMapProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [showList, setShowList] = useState(false)
 
-  // Extract unique categories
+  // Extract unique categories and filter out "Les Deux" since "Tous" handles showing all
   const categories = useMemo(() => {
     const cats = locations
       .map((loc) => loc.category)
-      .filter((cat): cat is string => Boolean(cat))
+      .filter((cat): cat is string => Boolean(cat) && cat !== "Les Deux")
     return [...new Set(cats)]
   }, [locations])
 
   // Filter locations by category
   const filteredLocations = useMemo(() => {
     if (!selectedCategory) return locations
-    return locations.filter((loc) => loc.category === selectedCategory)
+    // If a specific category is selected (e.g., "TSA"), show locations that are either "TSA" or "Les Deux"
+    return locations.filter((loc) => loc.category === selectedCategory || loc.category === "Les Deux")
   }, [locations, selectedCategory])
 
   const handleMarkerClick = (location: Location) => {
@@ -67,8 +68,8 @@ export function InteractiveMap({ locations }: InteractiveMapProps) {
       <header className="border-b bg-background px-4 py-3">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-primary" />
-            <h1 className="text-lg font-semibold">Métropole Européenne de Lille</h1>
+            <MapIcon className="h-5 w-5 text-primary" />
+            <h1 className="text-lg font-bold">Carte des MAS/EAM - NPDC</h1>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
@@ -95,12 +96,38 @@ export function InteractiveMap({ locations }: InteractiveMapProps) {
           </div>
         </div>
         {categories.length > 0 && (
-          <div className="mt-3">
+          <div className="mt-3 flex flex-col gap-3">
             <CategoryFilter
               categories={categories}
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
             />
+            <div className="flex flex-wrap items-center gap-4 border-t pt-2">
+              <div className="flex items-center gap-1.5">
+                <div className="h-3 w-3 rounded-full bg-red-500" />
+                <span className="text-[10px] font-medium uppercase text-muted-foreground">TSA</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="h-3 w-3 rounded-full bg-blue-500" />
+                <span className="text-[10px] font-medium uppercase text-muted-foreground">Polyhandicap</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="h-3 w-3 rounded-full bg-purple-600" />
+                <span className="text-[10px] font-medium uppercase text-muted-foreground">Les deux</span>
+              </div>
+              <div className="flex items-center gap-1.5 ml-auto">
+                <div className="h-3 w-3 rounded-full bg-[#dbeafe] border border-[#2563eb] opacity-40" />
+                <span className="text-[10px] font-medium uppercase text-muted-foreground">Nord (59)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="h-3 w-3 rounded-full bg-[#fef3c7] border border-[#d97706] opacity-40" />
+                <span className="text-[10px] font-medium uppercase text-muted-foreground">Pas-de-Calais (62)</span>
+              </div>
+              <div className="flex items-center gap-1.5 border-l pl-4">
+                <div className="h-3 w-3 border-2 border-black border-dashed rounded-sm" />
+                <span className="text-[10px] font-medium uppercase text-muted-foreground">MEL</span>
+              </div>
+            </div>
           </div>
         )}
       </header>
