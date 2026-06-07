@@ -155,8 +155,8 @@ export function InteractiveMap({ locations }: InteractiveMapProps) {
 
         {/* Map */}
         <div className={cn(
-          "flex-1 transition-opacity", 
-          showList ? "opacity-0 md:opacity-100" : "opacity-100"
+          "flex-1", 
+          showList ? "hidden md:block" : "block"
         )}>
           <Suspense
             fallback={

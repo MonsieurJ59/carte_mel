@@ -1,6 +1,6 @@
 "use client"
 
-import { ExternalLink, MapPin, Phone } from "lucide-react"
+import { ExternalLink, MapPin, Phone, Users, Home } from "lucide-react"
 import type { Location } from "@/types/location"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -44,14 +44,24 @@ export function LocationCard({ location, isSelected, onClick }: LocationCardProp
             </div>
           </div>
 
-          <p className="line-clamp-2 text-xs text-muted-foreground leading-relaxed">
-            {location.description}
-          </p>
-
           <div className="space-y-1.5 mt-1">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-primary" />
-              <span className="truncate">{location.address}</span>
+            {location.publicType && (
+              <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
+                <Users className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
+                <span className="line-clamp-1">{location.publicType}</span>
+              </div>
+            )}
+            
+            {location.admissionType && (
+              <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
+                <Home className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
+                <span className="line-clamp-1">{location.admissionType}</span>
+              </div>
+            )}
+
+            <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
+              <MapPin className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
+              <span className="line-clamp-1">{location.address}</span>
             </div>
             
             {location.phone && (
