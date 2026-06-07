@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { MapContainer, TileLayer, Marker, Popup, useMap, GeoJSON } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
@@ -48,6 +48,7 @@ interface LeafletMapProps {
 
 export function LeafletMap({ locations, selectedLocation, onMarkerClick }: LeafletMapProps) {
   const [mounted, setMounted] = useState(false)
+  const markerRefs = useRef<{ [key: number]: L.Marker | null }>({})
 
   // Region center coordinates (NPDC)
   const regionCenter: [number, number] = [50.48, 2.9]
@@ -56,6 +57,15 @@ export function LeafletMap({ locations, selectedLocation, onMarkerClick }: Leafl
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (selectedLocation && markerRefs.current[selectedLocation.id]) {
+      const marker = markerRefs.current[selectedLocation.id]
+      if (marker) {
+        marker.openPopup()
+      }
+    }
+  }, [selectedLocation])
 
   if (!mounted) {
     return (
@@ -113,6 +123,9 @@ export function LeafletMap({ locations, selectedLocation, onMarkerClick }: Leafl
           icon={icons[location.category as keyof typeof icons] || icons.TSA}
           eventHandlers={{
             click: () => onMarkerClick(location),
+          }}
+          ref={(ref) => {
+            markerRefs.current[location.id] = ref
           }}
         >
           <Popup maxWidth={320} minWidth={280}>

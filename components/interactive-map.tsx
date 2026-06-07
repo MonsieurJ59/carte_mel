@@ -1,11 +1,12 @@
 "use client"
 
 import { useState, useMemo, Suspense, lazy } from "react"
-import { MapPin, List, Map as MapIcon, AlertCircle } from "lucide-react"
+import { MapPin, List, Map as MapIcon, AlertCircle, Search } from "lucide-react"
 import type { Location } from "@/types/location"
 import { LocationCard } from "./location-card"
 import { CategoryFilter } from "./category-filter"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 // Lazy load the map component to avoid SSR issues
@@ -20,22 +21,37 @@ interface InteractiveMapProps {
 export function InteractiveMap({ locations }: InteractiveMapProps) {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
   const [showList, setShowList] = useState(false)
 
   // Extract unique categories and filter out "Les Deux" since "Tous" handles showing all
   const categories = useMemo(() => {
     const cats = locations
       .map((loc) => loc.category)
-      .filter((cat): cat is string => Boolean(cat) && cat !== "Les Deux")
+      .filter((cat): cat is Location["category"] => Boolean(cat) && cat !== "Les Deux")
     return [...new Set(cats)]
   }, [locations])
 
-  // Filter locations by category
+  // Filter locations by category and search query
   const filteredLocations = useMemo(() => {
-    if (!selectedCategory) return locations
-    // If a specific category is selected (e.g., "TSA"), show locations that are either "TSA" or "Les Deux"
-    return locations.filter((loc) => loc.category === selectedCategory || loc.category === "Les Deux")
-  }, [locations, selectedCategory])
+    let filtered = locations
+    
+    if (selectedCategory) {
+      filtered = filtered.filter((loc) => loc.category === selectedCategory || loc.category === "Les Deux")
+    }
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter((loc) => 
+        loc.name.toLowerCase().includes(query) || 
+        loc.address.toLowerCase().includes(query) ||
+        (loc.publicType && loc.publicType.toLowerCase().includes(query)) ||
+        (loc.admissionType && loc.admissionType.toLowerCase().includes(query))
+      )
+    }
+    
+    return filtered
+  }, [locations, selectedCategory, searchQuery])
 
   const handleMarkerClick = (location: Location) => {
     setSelectedLocation(location)
@@ -137,19 +153,40 @@ export function InteractiveMap({ locations }: InteractiveMapProps) {
         {/* Sidebar - hidden on mobile unless showList is true */}
         <aside
           className={cn(
-            "absolute inset-0 z-20 overflow-y-auto bg-background p-4 transition-transform md:relative md:inset-auto md:z-auto md:w-80 md:translate-x-0 md:border-r lg:w-96",
+            "absolute inset-0 z-20 flex flex-col overflow-hidden bg-background transition-transform md:relative md:inset-auto md:z-auto md:w-80 md:translate-x-0 md:border-r lg:w-96",
             showList ? "translate-x-0" : "-translate-x-full"
           )}
         >
-          <div className="flex flex-col gap-3 pb-20 md:pb-0">
-            {filteredLocations.map((location) => (
-              <LocationCard
-                key={location.id}
-                location={location}
-                isSelected={selectedLocation?.id === location.id}
-                onClick={() => handleCardClick(location)}
+          <div className="border-b p-4">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Rechercher une structure, ville..."
+                className="pl-9 bg-muted/50"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
-            ))}
+            </div>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex flex-col gap-3 pb-20 md:pb-0">
+              {filteredLocations.length > 0 ? (
+                filteredLocations.map((location) => (
+                  <LocationCard
+                    key={location.id}
+                    location={location}
+                    isSelected={selectedLocation?.id === location.id}
+                    onClick={() => handleCardClick(location)}
+                  />
+                ))
+              ) : (
+                <div className="py-8 text-center text-sm text-muted-foreground">
+                  Aucun résultat ne correspond à votre recherche.
+                </div>
+              )}
+            </div>
           </div>
         </aside>
 
